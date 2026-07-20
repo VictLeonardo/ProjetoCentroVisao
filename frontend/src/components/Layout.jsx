@@ -3,6 +3,7 @@ import Logo from './Logo.jsx';
 
 const links = [
   { to: '/', label: 'Dashboard', end: true },
+  { to: '/transacoes', label: 'Transações' },
   { to: '/excecoes', label: 'Exceções' },
   { to: '/cameras', label: 'Câmeras' },
 ];

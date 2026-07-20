@@ -6,7 +6,7 @@ const {
   getExceptions,
   reconcileAll,
 } = require('../services/reconciliationService');
-const { transactionRepository, cameraRepository } = require('../repositories');
+const { transactionRepository, cameraRepository, presenceRepository } = require('../repositories');
 const { recordAction, learningSignals } = require('../services/auditService');
 const { auditRepository } = require('../repositories');
 const { confidenceRules } = require('../config/confidenceRules');
@@ -71,6 +71,13 @@ router.get('/learning', wrap(async (req, res) => {
 // --- Câmeras ---
 router.get('/cameras', wrap(async (req, res) => {
   res.json(await cameraRepository.list());
+}));
+
+// --- Mapa de presença por loja ---
+router.get('/presence/:storeId', wrap(async (req, res) => {
+  const data = await presenceRepository.getByStore(req.params.storeId);
+  if (!data) return res.status(404).json({ error: 'Loja sem dados de presença' });
+  res.json(data);
 }));
 
 // --- Lojas ---

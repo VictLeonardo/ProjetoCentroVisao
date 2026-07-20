@@ -70,7 +70,7 @@ export default function Dashboard() {
                 <th className="px-5 py-2 font-medium">Loja</th>
                 <th className="px-5 py-2 font-medium">Valor</th>
                 <th className="px-5 py-2 font-medium">Data</th>
-                <th className="px-5 py-2 font-medium">Motivo</th>
+                <th className="px-5 py-2 font-medium">Sugestão do Agente de IA</th>
                 <th className="px-5 py-2 font-medium">Confiança</th>
               </tr>
             </thead>

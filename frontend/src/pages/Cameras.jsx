@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { api } from '../api/client.js';
 import { Loading, ErrorBox } from './Dashboard.jsx';
+import PresenceModal from '../components/PresenceModal.jsx';
 
 const STATUS = {
   online: { label: 'API ativa', dot: 'bg-emerald-500', badge: 'bg-emerald-100 text-emerald-700' },
@@ -12,6 +13,7 @@ export default function Cameras() {
   const [cameras, setCameras] = useState(null);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState('all');
+  const [presence, setPresence] = useState(null); // { storeId, storeName } | null
 
   useEffect(() => {
     api.getCameras().then(setCameras).catch((e) => setError(e.message));
@@ -45,7 +47,7 @@ export default function Cameras() {
       <div>
         <h1 className="text-xl font-semibold text-slate-800">Status das câmeras</h1>
         <p className="text-sm text-slate-500">
-          Infraestrutura por loja — câmeras Intelbras. Fase de mapeamento de acesso (sem vídeo/métricas).
+          Infraestrutura por loja — câmeras Intelbras. Clique em uma loja para ver o mapa de presença.
         </p>
       </div>
 
@@ -67,7 +69,12 @@ export default function Cameras() {
         {filtered.map((c) => {
           const st = STATUS[c.status] || STATUS.offline;
           return (
-            <div key={c.id} className="rounded-lg border border-slate-200 bg-white p-4">
+            <button
+              key={c.id}
+              type="button"
+              onClick={() => setPresence({ storeId: c.storeId, storeName: c.storeName })}
+              className="rounded-lg border border-slate-200 bg-white p-4 text-left transition-colors hover:border-brand-teal hover:bg-slate-50"
+            >
               <div className="flex items-start justify-between">
                 <div>
                   <div className="font-medium text-slate-700">{c.storeName}</div>
@@ -94,10 +101,20 @@ export default function Cameras() {
                   {c.notes}
                 </div>
               )}
-            </div>
+
+              <div className="mt-3 text-xs font-medium text-brand-blue">Ver mapa de presença →</div>
+            </button>
           );
         })}
       </div>
+
+      {presence && (
+        <PresenceModal
+          storeId={presence.storeId}
+          storeName={presence.storeName}
+          onClose={() => setPresence(null)}
+        />
+      )}
     </div>
   );
 }

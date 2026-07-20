@@ -17,6 +17,7 @@ const DATA_SOURCE = process.env.DATA_SOURCE || 'mock';
 const mock = {
   transactionRepository: require('./mock/transactionRepository'),
   cameraRepository: require('./mock/cameraRepository'),
+  presenceRepository: require('./mock/presenceRepository'),
 };
 
 function load(name) {
@@ -32,6 +33,7 @@ module.exports = {
   DATA_SOURCE,
   transactionRepository: load('transactionRepository'),
   cameraRepository: load('cameraRepository'),
+  presenceRepository: load('presenceRepository'),
   // auditoria fica sempre em mock nesta fase (vira tabela append-only depois)
   auditRepository: require('./mock/auditRepository'),
 };

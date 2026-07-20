@@ -21,11 +21,13 @@ async function req(path, options = {}) {
 
 export const api = {
   getDashboard: () => req('/dashboard'),
+  getTransactions: () => req('/transactions'),
   getExceptions: () => req('/exceptions'),
   getTransaction: (id) => req(`/transactions/${id}`),
   postAction: (id, payload) =>
     req(`/transactions/${id}/action`, { method: 'POST', body: JSON.stringify(payload) }),
   getCameras: () => req('/cameras'),
+  getPresence: (storeId) => req(`/presence/${storeId}`),
   getRules: () => req('/rules'),
   getLearning: () => req('/learning'),
 };
