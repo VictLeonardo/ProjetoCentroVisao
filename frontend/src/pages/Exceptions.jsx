@@ -156,6 +156,54 @@ function Detail({ tx, onActionDone }) {
         </div>
       </div>
 
+      {/* Detalhamento do pedido: produtos, quantidades e valores */}
+      {tx.items && tx.items.length > 0 && (
+        <div>
+          <h3 className="mb-2 text-sm font-medium text-slate-600">Detalhamento do pedido</h3>
+          <div className="overflow-hidden rounded-md border border-slate-200">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-slate-50 text-left text-xs uppercase text-slate-400">
+                  <th className="px-3 py-2 font-medium">Produto</th>
+                  <th className="px-3 py-2 text-center font-medium">Qtd</th>
+                  <th className="px-3 py-2 text-right font-medium">Valor unit.</th>
+                  <th className="px-3 py-2 text-right font-medium">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tx.items.map((it, i) => (
+                  <tr key={i} className="border-t border-slate-100">
+                    <td className="px-3 py-2 text-slate-700">{it.produto}</td>
+                    <td className="px-3 py-2 text-center font-mono text-slate-600">{it.qtd}</td>
+                    <td className="px-3 py-2 text-right font-mono text-slate-600">{brl(it.valorUnit)}</td>
+                    <td className="px-3 py-2 text-right font-mono text-slate-700">{brl(it.qtd * it.valorUnit)}</td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr className="border-t border-slate-200 bg-slate-50">
+                  <td className="px-3 py-2 text-xs font-semibold uppercase text-slate-500" colSpan="3">
+                    Total do pedido
+                  </td>
+                  <td className="px-3 py-2 text-right font-mono font-semibold text-slate-800">
+                    {brl(tx.items.reduce((s, it) => s + it.qtd * it.valorUnit, 0))}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          {(() => {
+            const itemsTotal = +tx.items.reduce((s, it) => s + it.qtd * it.valorUnit, 0).toFixed(2);
+            const posAmount = tx.sources.pos && tx.sources.pos.present ? tx.sources.pos.amount : tx.amount;
+            return itemsTotal !== posAmount ? (
+              <div className="mt-2 text-xs text-amber-700">
+                Atenção: a soma dos itens ({brl(itemsTotal)}) difere do valor no POS ({brl(posAmount)}).
+              </div>
+            ) : null;
+          })()}
+        </div>
+      )}
+
       {/* Ações */}
       <ActionBar tx={tx} onActionDone={onActionDone} />
 
